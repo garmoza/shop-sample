@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  swagger:
+    image: swaggerapi/swagger-editor
+    ports:
+      - "81:8080"

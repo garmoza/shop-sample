@@ -1,0 +1,776 @@
+openapi: 3.0.3
+
+info:
+  title: Employee
+  version: 1.0.11
+  
+servers:
+  - url: http://localhost:8080
+  
+tags:
+  - name: UserController
+  - name: OrganizationController
+  - name: CategoryController
+  - name: ProductController
+  - name: CharacteristicController
+  - name: ProductCharacteristicController
+
+paths:
+  /users:
+    get:
+      tags:
+        - UserController
+      summary: "List of users"
+      operationId: "getUsers"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserDtoDefault"
+    post:
+      tags:
+        - UserController
+      summary: "Creates new user"
+      operationId: "postUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDtoCreate"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDtoDefault"
+    put:
+      tags:
+        - UserController
+      summary: "Update user"
+      operationId: "putUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDtoDefault"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDtoDefault"
+        "404":
+          description: "Not found"
+  /users/{id}:
+    get:
+      tags:
+        - UserController
+      summary: "User by user id"
+      operationId: "getUserById"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDtoDefault"
+        "404":
+          description: "Not found"
+    delete:
+      tags:
+        - UserController
+      summary: "Delete user by id"
+      operationId: "deleteUser"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        "204":
+          description: "No Content"
+          
+  
+  /organizations:
+    get:
+      tags:
+        - OrganizationController
+      summary: "List of organizations"
+      operationId: "getAllOrganizations"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/OrganizationDtoDefault"
+    post:
+      tags:
+        - OrganizationController
+      summary: "Creates new organization"
+      operationId: "postOrganization"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrganizationDtoCreate"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationDtoDefault"
+        "404":
+          description: "Not found"
+    put:
+      tags:
+          - OrganizationController
+      summary: "Update organization"
+      operationId: "putOrganization"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrganizationDtoDefault"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationDtoDefault"
+        "404":
+          description: "Not found"
+  /organizations/{id}:
+    get:
+      tags:
+        - OrganizationController
+      summary: "Organization by id"
+      operationId: "getOrganizationById"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrganizationDtoDefault"
+        "404":
+          description: "Not found"
+                
+  /categories:
+    get:
+      tags:
+        - CategoryController
+      summary: "List of categories"
+      operationId: "getAllCategories"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/CategoryDtoFull"
+    post:
+      tags:
+        - CategoryController
+      summary: "Creates category without parent"
+      operationId: "postCategory"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryDtoCreate"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CategoryDtoDefault"
+  /categories/{id}:
+    post:
+      tags:
+        - CategoryController
+      summary: "Creates category for parent with id"
+      operationId: "postCategoryByParentId"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryDtoCreate"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CategoryDtoDefault"
+        "404":
+          description: "Not found"
+                
+  /products:
+    get:
+      tags:
+        - ProductController
+      summary: "List of products"
+      operationId: "getAllProducts"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ProductDtoDefault"
+    post:
+      tags:
+        - ProductController
+      summary: "Creates new product"
+      operationId: "postProduct"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductDtoCreate"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDtoDefault"
+    put:
+      tags:
+        - ProductController
+      summary: "Update product"
+      operationId: "putProduct"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductDtoDefault"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDtoDefault"
+  /products/{id}:
+    get:
+      tags:
+        - ProductController
+      summary: "Product by id"
+      operationId: "getProductById"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDtoFull"
+    delete:
+      tags:
+        - ProductController
+      summary: "Delete product by id"
+      operationId: "deleteProduct"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        "204":
+          description: "No Content"
+          
+  
+          
+  /characteristics:
+    get:
+      tags:
+        - CharacteristicController
+      summary: "List of characteristics"
+      operationId: "getAllCharacteristics"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/CharacteristicDtoFull"
+    post:
+      tags:
+        - CharacteristicController
+      summary: "Creates new characteristic"
+      operationId: "postCharacteristic"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CharacteristicDtoCreate"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CharacteristicDtoDefault"
+                
+                
+  /products/{productId}/characteristics:
+    get:
+      tags:
+          - ProductCharacteristicController
+      summary: "GET products/{productId}/characteristics"
+      operationId: "getAllProductCharacteristics"
+      parameters:
+      - name: "productId"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items: {}
+                  # $ref: "#/components/schemas/Default"
+
+
+components:
+  schemas:
+    UserDtoDefault:
+      required:
+        - id
+        - username
+        - email
+        - balance
+        - status
+        - authorities
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: "user1"
+        email:
+          type: string
+          example: "user1@mail.com"
+        balance:
+          type: number
+          format: double
+          example: 0.0
+        status:
+          type: string
+          example: "ENABLED"
+        authorities:
+          type: array
+          items:
+            type: string
+            example: "ROLE_CONSUMER"
+    UserDtoCreate:
+      required:
+        - username
+        - email
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          example: "my_username"
+        email:
+          type: string
+          example: "nikita@mail.com"
+        password:
+          type: string
+          example: "123"
+    OrganizationDtoDefault:
+      required:
+        - id
+        - name
+        - description
+        - logo
+        - balance
+        - status
+        - creationTime
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Organization name"
+        description:
+          type: string
+          example: "Description"
+        logo:
+          type: string
+          example: "logo"
+        balance:
+          type: number
+          format: double
+          example: 0.0
+        status:
+          type: string
+          example: "CONFIRMATION"
+        creationTime:
+          type: string
+          example: "2023-07-16T10:11:02.754+00:00"
+    OrganizationDtoCreate:
+      required:
+        - userId
+        - name
+        - description
+        - logo
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Organization name"
+        description:
+          type: string
+          example: ""
+        logo:
+          type: string
+          example: "logo"
+          
+    CategoryDtoDefault:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Category name"
+    CategoryDtoCreate:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: "Category name"
+    CategoryDtoFull:
+      required:
+        - id
+        - name
+        - children
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Category name"
+        children:
+          type: "array"
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 2
+              name:
+                type: string
+                example: "Category name"
+              children:
+                type: "array"
+                items: 
+                  type: object
+            
+      
+    ProductDtoDefault:
+      required:
+        - id
+        - name
+        - description
+        - price
+        - stock
+        - status
+        - creationTime
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Product name"
+        description:
+          type: string
+          example: "Product description"
+        price:
+          type: number
+          format: double
+          example: 5.5
+        stock:
+          type: integer
+          format: int64
+          example: 12000
+        status:
+          type: string
+          example: "CONFIRMATION"
+        creationTime:
+          type: string
+          example: "2023-07-16T10:11:02.754+00:00"
+    ProductDtoCreate:
+      required:
+        - organizationId
+        - categoryId
+        - name
+        - description
+        - price
+        - stock
+      type: object
+      properties:
+        organizationId:
+          type: integer
+          format: int64
+          example: 1
+        categoryId:
+          type: integer
+          format: int64
+          example: 2
+        name:
+          type: string
+          example: "New Product name"
+        description:
+          type: string
+          example: "New Product description"
+        price:
+          type: number
+          format: double
+          example: 5.5
+        stock:
+          type: integer
+          format: int64
+          example: 12000
+    ProductDtoFull:
+      required:
+        - id
+        - name
+        - description
+        - price
+        - stock
+        - status
+        - creationTime
+        - organizationId
+        - categoryId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Product name"
+        description:
+          type: string
+          example: "Product description"
+        price:
+          type: number
+          format: double
+          example: 5.5
+        stock:
+          type: integer
+          format: int64
+          example: 12000
+        status:
+          type: string
+          example: "CONFIRMATION"
+        creationTime:
+          type: string
+          example: "2023-07-16T10:11:02.754+00:00"
+        organizationId:
+          type: integer
+          format: int64
+          example: 1
+        categoryId:
+          type: integer
+          format: int64
+          example: 2
+
+    CharacteristicDtoDefault:
+      required:
+        - id
+        - name
+        - type
+        - options
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Characteristic name"
+        type:
+          type: string
+          example: "SELECT"
+        options:
+          type: array
+          items:
+            type: string
+            example: "select option"
+    CharacteristicDtoCreate:
+      required:
+        - categoryId
+        - name
+        - type
+        - options
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Characteristic name"
+        type:
+          type: string
+          example: "SELECT"
+        options:
+          type: array
+          items:
+            type: string
+            example: "select option"
+    CharacteristicDtoFull:
+      required:
+        - id
+        - name
+        - type
+        - options
+        - categoryId
+        - categoryName
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Characteristic name"
+        type:
+          type: string
+          example: "SELECT"
+        options:
+          type: array
+          items:
+            type: string
+            example: "select option"
+        categoryId:
+          type: integer
+          format: int64
+          example: 1
+        categoryName:
+          type: string
+          example: "Category name"
+        
+# Example of properties (Java types)
+    SchemaExample:
+      properties:
+        String:
+          type: string
+          example: "Example of Java String"
+        int:
+          type: integer
+          format: int32
+          example: 123
+        Integer:
+          type: integer
+          format: int32
+          example: 123
+        long:
+          type: integer
+          format: int64
+          example: 123
+        Long:
+          type: integer
+          format: int64
+          example: 123
+        double:
+          type: number
+          format: double
+          example: 0.22
+        Double:
+          type: number
+          format: double
+          example: 0.22
+          
+        
